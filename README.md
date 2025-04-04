@@ -1,12 +1,12 @@
 # Introduction to GPU gospel
 
-Programming a GPU kernel is like programming a website by specifying each pixel individually. This analogy makes sense because, in the end, the website is rendered into pixels.
+Programming a GPU kernel is like programming a website by specifying each pixel individually. Doing it by pixels makes sense because in the end, the website is rendered into pixels.
 
 However, this approach is highly inefficient, so a compiler acts as an intermediary. It takes your manually specified pixels and converts them into functionally equivalent HTML. Later, the HTML is still rendered into pixels.
 
-You care a lot about performance, and performance depends on the generated HTML. You program pixels and there is no obvious way to see how they relate to the HTML. Your code certainly does not contain any HTML.
+You care a lot about performance and performance depends on the generated HTML. You program pixels and there is no obvious way to see how they relate to the HTML. Your code certainly does not contain any HTML.
 
-Technically, there are ways to inspect the generated HTML, but they are complicated. Additionally, for some reason, some pixels are more efficient than others. Sometimes it is faster to draw multiple pixels of the same color, sometimes it is not. Sometimes it is faster to draw pixels in strange orders, and you do not really know why.
+Technically, there are ways to inspect the generated HTML, but they are complicated. Additionally, for some reason, some pixels are more efficient than others. Sometimes it is faster to draw multiple pixels of the same color, sometimes it is not. Sometimes it is faster to draw pixels in strange orders and you do not really know why.
 
 So, welcome to the **GPU Gospel**, a list of rules, concepts, and commandments for programming GPU kernels. Most of these principles are universal, but some numbers and details are specific to the NVIDIA A100-PCIE-40GB.
 
@@ -33,7 +33,7 @@ So, welcome to the **GPU Gospel**, a list of rules, concepts, and commandments f
    - Global (DRAM): Large but slow memory (typically 1–80GB). ~300 cycles to access.
    - L2 cache (SMEM): Fast, smaller memory shared across all threads (typically 4MB–96MB). ~30-100 cycles to access.
    - L1 cache: Very fast memory directly on SM. Configurable into shared memory and cache. ~30 cycles to access.
-   - Registers: Extremely fast memory located directly in the SM. 1-cycle access time.
+   - Registers: Extremely fast memory located directly in the SM. 1-cycle access time. Typically 65k registers per SM.  
 1. Each memory type has a preferred access pattern.
 1. Global memory is accessed in transactions of 32B, 64B, or 128B. 128B is 1 float per thread in a warp: 4B*32 = 128B.
    - When threads in a warp access shared memory, their needs are handled with the minimal set of transactions (coalesced).
